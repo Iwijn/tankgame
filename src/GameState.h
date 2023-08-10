@@ -1,16 +1,14 @@
-//
-// Created by iwijn on 8/8/23.
-//
-
 #ifndef TANKGAME_GAMESTATE_H
 #define TANKGAME_GAMESTATE_H
 
+#include "util.h"
 
 class GameState {
 public:
     float xPos;
     float yPos;
     uint64_t prevLoopTime;
+    GameState();
 };
 
 

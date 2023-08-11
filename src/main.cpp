@@ -10,6 +10,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(400, 300), "Tank Game");
 
     auto gameState = new GameState();
+    auto tank = Tank();
+    gameState->tanks.push_back(tank);
     // Start the game loop
     while (window.isOpen())
     {
@@ -29,16 +31,16 @@ int main() {
             window.clear(sf::Color::White);
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                gameState->xPos += 10;
+                gameState->tanks.front().xPos += 10;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                gameState->xPos -= 10;
+                gameState->tanks.front().xPos -= 10;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                gameState->yPos -= 10;
+                gameState->tanks.front().yPos -= 10;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                gameState->yPos += 10;
+                gameState->tanks.front().yPos += 10;
             }
 
             drawWalls(window, gameState);
@@ -55,7 +57,7 @@ int main() {
 void drawTank(sf::RenderWindow &window, GameState *gameState) {
     sf::RectangleShape tank;
     tank.setFillColor(sf::Color::Black);
-    tank.setPosition(gameState->xPos, gameState->yPos);
+    tank.setPosition(gameState->tanks.front().xPos, gameState->tanks.front().yPos);
 
     tank.setSize(sf::Vector2f(50, 50));
     window.draw(tank);
@@ -64,10 +66,10 @@ void drawTank(sf::RenderWindow &window, GameState *gameState) {
 void drawWalls(sf::RenderWindow &window, GameState *gameState) {
     sf::RectangleShape wall;
     wall.setFillColor(sf::Color::Black);
+
     wall.setSize(sf::Vector2f(10, 50));
     int horizontalWallsRows = sizeof(gameState->horizontalWalls10) / sizeof(gameState->horizontalWalls10[0]);
     int horizontalWallsColumns = sizeof(gameState->horizontalWalls10[0]) / sizeof(gameState->horizontalWalls10[0][0]);
-
     for (int i = 0; i < horizontalWallsRows; i++) {
         for (int j = 0; j < horizontalWallsColumns; j++) {
             if (gameState->horizontalWalls10[i][j] == 1) {

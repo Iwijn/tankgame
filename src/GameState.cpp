@@ -2,7 +2,6 @@
 #include "util.h"
 
 GameState::GameState() {
-    this->xPos=0;
-    this->yPos=0;
+    this->tanks = std::list<Tank>();
     this->prevLoopTime=timeSinceEpochMillisec();
 }

@@ -1,12 +1,13 @@
 #ifndef TANKGAME_GAMESTATE_H
 #define TANKGAME_GAMESTATE_H
 
+#include <list>
 #include "util.h"
+#include "Tank.h"
 
 class GameState {
 public:
-    float xPos;
-    float yPos;
+    std::list<Tank> tanks;
     uint64_t prevLoopTime;
     GameState();
     int horizontalWalls4[4][4] = {

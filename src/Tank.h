@@ -6,6 +6,7 @@ class Tank {
 public:
     float xPos;
     float yPos;
+    float rotation;
     Tank();
 };
 

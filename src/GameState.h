@@ -8,7 +8,7 @@
 
 class GameState {
 public:
-    std::list<Tank> tanks;
+    std::list<Tank*> tanks;
     uint64_t prevLoopTime;
     int gridSize;
     int wallThickness;

@@ -30,8 +30,8 @@ int main() {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Game");
 
-    auto gameState = new GameState(WALL_LENGTH, WALL_THICKNESS);
-    auto tank = Tank(TANK_WIDTH, TANK_HEIGHT);
+    GameState* gameState = new GameState(WALL_LENGTH, WALL_THICKNESS);
+    Tank* tank = new Tank(TANK_WIDTH, TANK_HEIGHT);
     gameState->tanks.push_back(tank);
     // Start the game loop
     while (window.isOpen())
@@ -74,13 +74,14 @@ int main() {
             window.display();
         }
     }
-
+    delete tank;
+    delete gameState;
     return EXIT_SUCCESS;
 }
 
 void moveForwardIfPossible(GameState *gameState) {
-    Tank *tank = &gameState->tanks.front();
-    float rotationRadians = gameState->tanks.front().rotation * (M_PI / 180);
+    Tank *tank = gameState->tanks.front();
+    float rotationRadians = gameState->tanks.front()->rotation * (M_PI / 180);
     float newXPos = tank->xPos + ((float) TANK_MOVE_SPEED) * std::sin(rotationRadians);
     float newYPos = tank->yPos - ((float) TANK_MOVE_SPEED) * std::cos(rotationRadians);
     Tank *movedTank = new Tank(TANK_WIDTH, TANK_HEIGHT);
@@ -97,22 +98,22 @@ void moveForwardIfPossible(GameState *gameState) {
 }
 
 void moveBackwardsIfPossible(GameState *gameState) {
-    float rotationRadians = gameState->tanks.front().rotation * M_PI / 180;
-    gameState->tanks.front().xPos -= ((float) TANK_MOVE_SPEED) * std::sin(rotationRadians);
-    gameState->tanks.front().yPos += ((float) TANK_MOVE_SPEED) * std::cos(rotationRadians);
+    float rotationRadians = gameState->tanks.front()->rotation * M_PI / 180;
+    gameState->tanks.front()->xPos -= ((float) TANK_MOVE_SPEED) * std::sin(rotationRadians);
+    gameState->tanks.front()->yPos += ((float) TANK_MOVE_SPEED) * std::cos(rotationRadians);
 }
 
 void turnLeftIfPossible(GameState *gameState) {
-    gameState->tanks.front().rotation -= TANK_TURN_SPEED;
-    if (gameState->tanks.front().rotation < 0) {
-        gameState->tanks.front().rotation += 360;
+    gameState->tanks.front()->rotation -= TANK_TURN_SPEED;
+    if (gameState->tanks.front()->rotation < 0) {
+        gameState->tanks.front()->rotation += 360;
     }
 }
 
 void turnRightIfPossible(GameState *gameState) {
-    gameState->tanks.front().rotation += TANK_TURN_SPEED;
-    if (gameState->tanks.front().rotation >= 360) {
-        gameState->tanks.front().rotation -= 360;
+    gameState->tanks.front()->rotation += TANK_TURN_SPEED;
+    if (gameState->tanks.front()->rotation >= 360) {
+        gameState->tanks.front()->rotation -= 360;
     }
 }
 
@@ -120,8 +121,8 @@ void drawTank(sf::RenderWindow &window, GameState *gameState) {
     sf::RectangleShape tank;
     tank.setFillColor(sf::Color::Black);
     tank.setOrigin(TANK_WIDTH/2, TANK_HEIGHT/2);
-    tank.setPosition(gameState->tanks.front().xPos, gameState->tanks.front().yPos);
-    tank.setRotation(gameState->tanks.front().rotation);
+    tank.setPosition(gameState->tanks.front()->xPos, gameState->tanks.front()->yPos);
+    tank.setRotation(gameState->tanks.front()->rotation);
 
     tank.setSize(sf::Vector2f(TANK_WIDTH, TANK_HEIGHT));
     window.draw(tank);
@@ -132,13 +133,13 @@ void drawTank(sf::RenderWindow &window, GameState *gameState) {
         point.setRadius(CORNER_MARKER_RADIUS);
         point.setFillColor(sf::Color::Red);
         point.setOrigin(CORNER_MARKER_RADIUS, CORNER_MARKER_RADIUS);
-        point.setPosition(gameState->tanks.front().getTopLeftCorner().x, gameState->tanks.front().getTopLeftCorner().y);
+        point.setPosition(gameState->tanks.front()->getTopLeftCorner().x, gameState->tanks.front()->getTopLeftCorner().y);
         window.draw(point);
-        point.setPosition(gameState->tanks.front().getTopRightCorner().x, gameState->tanks.front().getTopRightCorner().y);
+        point.setPosition(gameState->tanks.front()->getTopRightCorner().x, gameState->tanks.front()->getTopRightCorner().y);
         window.draw(point);
-        point.setPosition(gameState->tanks.front().getBottomLeftCorner().x, gameState->tanks.front().getBottomLeftCorner().y);
+        point.setPosition(gameState->tanks.front()->getBottomLeftCorner().x, gameState->tanks.front()->getBottomLeftCorner().y);
         window.draw(point);
-        point.setPosition(gameState->tanks.front().getBottomRightCorner().x, gameState->tanks.front().getBottomRightCorner().y);
+        point.setPosition(gameState->tanks.front()->getBottomRightCorner().x, gameState->tanks.front()->getBottomRightCorner().y);
         window.draw(point);
     }
 }

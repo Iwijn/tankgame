@@ -3,7 +3,7 @@
 #include "util.h"
 
 GameState::GameState(int gridSize, int wallThickness) {
-    this->tanks = std::list<Tank>();
+    this->tanks = std::list<Tank*>();
     this->prevLoopTime=timeSinceEpochMillisec();
     this->gridSize=gridSize;
     this->wallThickness=wallThickness;

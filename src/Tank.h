@@ -3,6 +3,9 @@
 
 #include "util.h"
 #include <cmath>
+#include "GameState.h"
+
+class GameState;
 
 class Tank {
 public:

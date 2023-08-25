@@ -6,6 +6,8 @@
 #include "util.h"
 #include "Tank.h"
 
+class Tank;
+
 class GameState {
 public:
     std::list<Tank*> tanks;

@@ -14,14 +14,10 @@
 #define WALL_LENGTH 50
 #define CORNER_MARKER_RADIUS 2
 #define DEBUG false
+#define COLLISION_TESTING false
 
 void drawTank(sf::RenderWindow &window, GameState *gameState);
 void drawWalls(sf::RenderWindow &window, GameState *gameState);
-void moveLeftIfPossible(GameState *gameState);
-void moveForwardIfPossible(GameState *gameState);
-void moveBackwardsIfPossible(GameState *gameState);
-void turnLeftIfPossible(GameState *gameState);
-void turnRightIfPossible(GameState *gameState);
 void drawGrid(sf::RenderWindow &window);
 void testWallCollision(sf::RenderWindow &window, GameState *gameState);
 
@@ -30,8 +26,8 @@ int main() {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Game");
 
-    GameState* gameState = new GameState(WALL_LENGTH, WALL_THICKNESS);
-    Tank* tank = new Tank(TANK_WIDTH, TANK_HEIGHT);
+    GameState* gameState = new GameState(WALL_LENGTH, WALL_THICKNESS, TANK_WIDTH, TANK_HEIGHT);
+    Tank* tank = new Tank(gameState);
     gameState->tanks.push_back(tank);
     // Start the game loop
     while (window.isOpen())
@@ -52,22 +48,24 @@ int main() {
             window.clear(sf::Color::White);
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                turnRightIfPossible(gameState);
+                gameState->tanks.front()->rotate(TANK_TURN_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                turnLeftIfPossible(gameState);
+                gameState->tanks.front()->rotate(-TANK_TURN_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                moveForwardIfPossible(gameState);
+                gameState->tanks.front()->moveIfPossible(TANK_MOVE_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                moveBackwardsIfPossible(gameState);
+                gameState->tanks.front()->move(-TANK_MOVE_SPEED);
             }
 
             drawWalls(window, gameState);
             drawTank(window, gameState);
             if (DEBUG) {
                 drawGrid(window);
+            }
+            if (COLLISION_TESTING) {
                 testWallCollision(window, gameState);
             }
             // Update the window
@@ -79,50 +77,12 @@ int main() {
     return EXIT_SUCCESS;
 }
 
-void moveForwardIfPossible(GameState *gameState) {
-    Tank *tank = gameState->tanks.front();
-    float rotationRadians = gameState->tanks.front()->rotation * (M_PI / 180);
-    float newXPos = tank->xPos + ((float) TANK_MOVE_SPEED) * std::sin(rotationRadians);
-    float newYPos = tank->yPos - ((float) TANK_MOVE_SPEED) * std::cos(rotationRadians);
-    Tank *movedTank = new Tank(TANK_WIDTH, TANK_HEIGHT);
-    movedTank->xPos = newXPos;
-    movedTank->yPos = newYPos;
-    movedTank->rotation = tank->rotation;
-    if (!gameState->isWall(movedTank->getTopLeftCorner()) &&
-    !gameState->isWall(movedTank->getTopRightCorner()) &&
-    !gameState->isWall(movedTank->getBottomLeftCorner()) &&
-    !gameState->isWall(movedTank->getBottomRightCorner())) {
-        tank->xPos = newXPos;
-        tank->yPos = newYPos;
-    }
-}
-
-void moveBackwardsIfPossible(GameState *gameState) {
-    float rotationRadians = gameState->tanks.front()->rotation * M_PI / 180;
-    gameState->tanks.front()->xPos -= ((float) TANK_MOVE_SPEED) * std::sin(rotationRadians);
-    gameState->tanks.front()->yPos += ((float) TANK_MOVE_SPEED) * std::cos(rotationRadians);
-}
-
-void turnLeftIfPossible(GameState *gameState) {
-    gameState->tanks.front()->rotation -= TANK_TURN_SPEED;
-    if (gameState->tanks.front()->rotation < 0) {
-        gameState->tanks.front()->rotation += 360;
-    }
-}
-
-void turnRightIfPossible(GameState *gameState) {
-    gameState->tanks.front()->rotation += TANK_TURN_SPEED;
-    if (gameState->tanks.front()->rotation >= 360) {
-        gameState->tanks.front()->rotation -= 360;
-    }
-}
-
 void drawTank(sf::RenderWindow &window, GameState *gameState) {
     sf::RectangleShape tank;
     tank.setFillColor(sf::Color::Black);
     tank.setOrigin(TANK_WIDTH/2, TANK_HEIGHT/2);
-    tank.setPosition(gameState->tanks.front()->xPos, gameState->tanks.front()->yPos);
-    tank.setRotation(gameState->tanks.front()->rotation);
+    tank.setPosition(gameState->tanks.front()->getXPos(), gameState->tanks.front()->getYPos());
+    tank.setRotation(gameState->tanks.front()->getRotation());
 
     tank.setSize(sf::Vector2f(TANK_WIDTH, TANK_HEIGHT));
     window.draw(tank);

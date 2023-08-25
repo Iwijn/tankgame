@@ -2,11 +2,13 @@
 #include "GameState.h"
 #include "util.h"
 
-GameState::GameState(int gridSize, int wallThickness) {
+GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight) {
     this->tanks = std::list<Tank*>();
     this->prevLoopTime=timeSinceEpochMillisec();
     this->gridSize=gridSize;
     this->wallThickness=wallThickness;
+    this->defaultTankWidth=defaultTankWidth;
+    this->defaultTankHeight=defaultTankHeight;
 }
 
 bool GameState::isWall(Point point) {

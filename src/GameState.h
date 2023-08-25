@@ -14,8 +14,12 @@ public:
     uint64_t prevLoopTime;
     int gridSize;
     int wallThickness;
-    GameState(int gridSize, int wallThickness);
+    GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight);
+    float defaultTankWidth;
+    float defaultTankHeight;
+
     bool isWall(Point point);
+
     int horizontalWalls4[4][4] = {
             {1, 1, 1, 1},
             {0, 0, 0, 0},

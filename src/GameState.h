@@ -18,7 +18,9 @@ public:
     float defaultTankWidth;
     float defaultTankHeight;
 
+    GridPoint getGridPoint(Point point);
     bool isWall(Point point);
+    void getCornerPointsOfWalls(std::list<Point>& cornerPoints, GridPoint gridPoint);
 
     int horizontalWalls4[4][4] = {
             {1, 1, 1, 1},

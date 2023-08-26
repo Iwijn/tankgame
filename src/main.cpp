@@ -13,7 +13,7 @@
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 50
 #define CORNER_MARKER_RADIUS 2
-#define DEBUG false
+#define DEBUG true
 #define COLLISION_TESTING false
 
 void drawTank(sf::RenderWindow &window, GameState &gameState);
@@ -48,16 +48,16 @@ int main() {
             window.clear(sf::Color::White);
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                gameState.tanks.front()->rotate(TANK_TURN_SPEED);
+                gameState.tanks.front()->rotateIfPossible(TANK_TURN_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                gameState.tanks.front()->rotate(-TANK_TURN_SPEED);
+                gameState.tanks.front()->rotateIfPossible(-TANK_TURN_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 gameState.tanks.front()->moveIfPossible(TANK_MOVE_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                gameState.tanks.front()->move(-TANK_MOVE_SPEED);
+                gameState.tanks.front()->moveIfPossible(-TANK_MOVE_SPEED);
             }
 
             drawWalls(window, gameState);

@@ -3,23 +3,22 @@
 
 #include "util.h"
 #include <cmath>
+#include <vector>
 #include "GameState.h"
 
 class GameState;
 
 class Tank {
 public:
-    GameState &gameState;
     explicit Tank(GameState &gameState);
+    void moveIfPossible(float distance);
+    void rotateIfPossible(float degrees);
+
+    Point getMiddlePoint();
     Point getTopLeftCorner();
     Point getTopRightCorner();
     Point getBottomLeftCorner();
     Point getBottomRightCorner();
-    Point rotatePoint(Point p);
-    void move(float distance);
-    bool isColliding();
-    void moveIfPossible(float distance);
-    void rotate(float degrees);
 
     float getXPos();
     void setXPos(float xPos);
@@ -32,11 +31,19 @@ public:
     float getRotation();
     void setRotation(float rotation);
 private:
+    GameState &gameState;
     float xPos;
     float yPos;
     float width;
     float height;
     float rotation;
+
+    bool isColliding();
+    bool isTank(Point point);
+    void getCollisionZoneGridPoints(std::list<GridPoint>& gridPoints);
+    void move(float distance);
+    void rotate(float degrees);
+
 };
 
 

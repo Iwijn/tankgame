@@ -9,8 +9,8 @@ class GameState;
 
 class Tank {
 public:
-    GameState* gameState;
-    explicit Tank(GameState* gameState);
+    GameState &gameState;
+    explicit Tank(GameState &gameState);
     Point getTopLeftCorner();
     Point getTopRightCorner();
     Point getBottomLeftCorner();

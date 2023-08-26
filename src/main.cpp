@@ -16,19 +16,19 @@
 #define DEBUG false
 #define COLLISION_TESTING false
 
-void drawTank(sf::RenderWindow &window, GameState *gameState);
-void drawWalls(sf::RenderWindow &window, GameState *gameState);
+void drawTank(sf::RenderWindow &window, GameState &gameState);
+void drawWalls(sf::RenderWindow &window, GameState &gameState);
 void drawGrid(sf::RenderWindow &window);
-void testWallCollision(sf::RenderWindow &window, GameState *gameState);
+void testWallCollision(sf::RenderWindow &window, GameState &gameState);
 
 
 int main() {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Game");
 
-    GameState* gameState = new GameState(WALL_LENGTH, WALL_THICKNESS, TANK_WIDTH, TANK_HEIGHT);
-    Tank* tank = new Tank(gameState);
-    gameState->tanks.push_back(tank);
+    GameState gameState(WALL_LENGTH, WALL_THICKNESS, TANK_WIDTH, TANK_HEIGHT);
+    Tank tank(gameState);
+    gameState.tanks.push_back(&tank);
     // Start the game loop
     while (window.isOpen())
     {
@@ -42,22 +42,22 @@ int main() {
         }
 
         // 60 game ticks per seconds
-        if (timeSinceEpochMillisec() - gameState->prevLoopTime > 1000/FPS) {
-            gameState->prevLoopTime = timeSinceEpochMillisec();
+        if (timeSinceEpochMillisec() - gameState.prevLoopTime > 1000/FPS) {
+            gameState.prevLoopTime = timeSinceEpochMillisec();
             // Clear screen
             window.clear(sf::Color::White);
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                gameState->tanks.front()->rotate(TANK_TURN_SPEED);
+                gameState.tanks.front()->rotate(TANK_TURN_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                gameState->tanks.front()->rotate(-TANK_TURN_SPEED);
+                gameState.tanks.front()->rotate(-TANK_TURN_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                gameState->tanks.front()->moveIfPossible(TANK_MOVE_SPEED);
+                gameState.tanks.front()->moveIfPossible(TANK_MOVE_SPEED);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                gameState->tanks.front()->move(-TANK_MOVE_SPEED);
+                gameState.tanks.front()->move(-TANK_MOVE_SPEED);
             }
 
             drawWalls(window, gameState);
@@ -72,17 +72,15 @@ int main() {
             window.display();
         }
     }
-    delete tank;
-    delete gameState;
     return EXIT_SUCCESS;
 }
 
-void drawTank(sf::RenderWindow &window, GameState *gameState) {
+void drawTank(sf::RenderWindow &window, GameState &gameState) {
     sf::RectangleShape tank;
     tank.setFillColor(sf::Color::Black);
     tank.setOrigin(TANK_WIDTH/2, TANK_HEIGHT/2);
-    tank.setPosition(gameState->tanks.front()->getXPos(), gameState->tanks.front()->getYPos());
-    tank.setRotation(gameState->tanks.front()->getRotation());
+    tank.setPosition(gameState.tanks.front()->getXPos(), gameState.tanks.front()->getYPos());
+    tank.setRotation(gameState.tanks.front()->getRotation());
 
     tank.setSize(sf::Vector2f(TANK_WIDTH, TANK_HEIGHT));
     window.draw(tank);
@@ -93,39 +91,39 @@ void drawTank(sf::RenderWindow &window, GameState *gameState) {
         point.setRadius(CORNER_MARKER_RADIUS);
         point.setFillColor(sf::Color::Red);
         point.setOrigin(CORNER_MARKER_RADIUS, CORNER_MARKER_RADIUS);
-        point.setPosition(gameState->tanks.front()->getTopLeftCorner().x, gameState->tanks.front()->getTopLeftCorner().y);
+        point.setPosition(gameState.tanks.front()->getTopLeftCorner().x, gameState.tanks.front()->getTopLeftCorner().y);
         window.draw(point);
-        point.setPosition(gameState->tanks.front()->getTopRightCorner().x, gameState->tanks.front()->getTopRightCorner().y);
+        point.setPosition(gameState.tanks.front()->getTopRightCorner().x, gameState.tanks.front()->getTopRightCorner().y);
         window.draw(point);
-        point.setPosition(gameState->tanks.front()->getBottomLeftCorner().x, gameState->tanks.front()->getBottomLeftCorner().y);
+        point.setPosition(gameState.tanks.front()->getBottomLeftCorner().x, gameState.tanks.front()->getBottomLeftCorner().y);
         window.draw(point);
-        point.setPosition(gameState->tanks.front()->getBottomRightCorner().x, gameState->tanks.front()->getBottomRightCorner().y);
+        point.setPosition(gameState.tanks.front()->getBottomRightCorner().x, gameState.tanks.front()->getBottomRightCorner().y);
         window.draw(point);
     }
 }
 
-void drawWalls(sf::RenderWindow &window, GameState *gameState) {
+void drawWalls(sf::RenderWindow &window, GameState &gameState) {
     sf::RectangleShape wall;
     wall.setFillColor(sf::Color::Black);
 
     wall.setSize(sf::Vector2f(WALL_LENGTH, WALL_THICKNESS));
-    int horizontalWallsRows = sizeof(gameState->horizontalWalls) / sizeof(gameState->horizontalWalls[0]);
-    int horizontalWallsColumns = sizeof(gameState->horizontalWalls[0]) / sizeof(gameState->horizontalWalls[0][0]);
+    int horizontalWallsRows = sizeof(gameState.horizontalWalls) / sizeof(gameState.horizontalWalls[0]);
+    int horizontalWallsColumns = sizeof(gameState.horizontalWalls[0]) / sizeof(gameState.horizontalWalls[0][0]);
     for (int y = 0; y < horizontalWallsRows; y++) {
         for (int x = 0; x < horizontalWallsColumns; x++) {
-            if (gameState->horizontalWalls[y][x] == 1) {
+            if (gameState.horizontalWalls[y][x] == 1) {
                 wall.setPosition(x*WALL_LENGTH, y*WALL_LENGTH);
                 window.draw(wall);
             }
         }
     }
 
-    int verticalWallsRows = sizeof(gameState->verticalWalls) / sizeof(gameState->verticalWalls[0]);
-    int verticalWallsColumns = sizeof(gameState->verticalWalls[0]) / sizeof(gameState->verticalWalls[0][0]);
+    int verticalWallsRows = sizeof(gameState.verticalWalls) / sizeof(gameState.verticalWalls[0]);
+    int verticalWallsColumns = sizeof(gameState.verticalWalls[0]) / sizeof(gameState.verticalWalls[0][0]);
     wall.setSize(sf::Vector2f(WALL_THICKNESS, WALL_LENGTH));
     for (int y = 0; y < verticalWallsRows; y++) {
         for (int x = 0; x < verticalWallsColumns; x++) {
-            if (gameState->verticalWalls[y][x] == 1) {
+            if (gameState.verticalWalls[y][x] == 1) {
                 wall.setPosition(x*WALL_LENGTH, y*WALL_LENGTH);
                 window.draw(wall);
             }
@@ -150,14 +148,14 @@ void drawGrid(sf::RenderWindow &window) {
     }
 }
 
-void testWallCollision(sf::RenderWindow &window, GameState *gameState) {
+void testWallCollision(sf::RenderWindow &window, GameState &gameState) {
 
     for (int i = 0; i < 1000; i++) {
         auto x = (float) (random() % WINDOW_WIDTH);
         auto y = (float) (random() % WINDOW_HEIGHT);
         sf::CircleShape point;
         point.setRadius(1);
-        if (gameState->isWall(Point {x, y})) {
+        if (gameState.isWall(Point {x, y})) {
             point.setFillColor(sf::Color::Red);
         } else {
             point.setFillColor(sf::Color::Green);

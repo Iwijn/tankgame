@@ -1,14 +1,15 @@
 #include <iostream>
 #include "Tank.h"
 
-Tank::Tank(GameState* gameState) {
-    this->gameState=gameState;
+
+Tank::Tank(GameState &gameState) : gameState(gameState) {
     this->xPos=100;
     this->yPos=100;
-    this->width=gameState->defaultTankWidth;
-    this->height=gameState->defaultTankHeight;
+    this->width=gameState.defaultTankWidth;
+    this->height=gameState.defaultTankHeight;
     this->rotation=0;
 }
+
 
 Point Tank::getTopLeftCorner() {
     struct Point point {
@@ -58,10 +59,10 @@ void Tank::move(float distance) {
 }
 
 bool Tank::isColliding() {
-    return gameState->isWall(this->getTopLeftCorner()) ||
-           gameState->isWall(this->getTopRightCorner()) ||
-           gameState->isWall(this->getBottomLeftCorner()) ||
-           gameState->isWall(this->getBottomRightCorner());
+    return gameState.isWall(this->getTopLeftCorner()) ||
+           gameState.isWall(this->getTopRightCorner()) ||
+           gameState.isWall(this->getBottomLeftCorner()) ||
+           gameState.isWall(this->getBottomRightCorner());
 }
 
 void Tank::moveIfPossible(float distance) {

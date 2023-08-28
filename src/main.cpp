@@ -13,7 +13,6 @@
 #define TANK_HEIGHT 50
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 50
-#define DEBUG true
 
 void drawTank(sf::RenderWindow &window, GameState &gameState);
 void drawWalls(sf::RenderWindow &window, GameState &gameState);

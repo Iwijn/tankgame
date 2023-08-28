@@ -3,6 +3,8 @@
 
 #include <chrono>
 
+#define DEBUG false
+
 struct Point {
     float x;
     float y;

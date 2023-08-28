@@ -43,6 +43,11 @@ void Tank::moveIfPossible(float distance) {
     this->move(distance);
     if (this->isColliding()) {
         this->move(-distance);
+        // move pixel per pixel until against wall
+        while(!this->isColliding()) {
+            this->move(distance > 0 ? 0.5 : -0.5);
+        }
+        this->move(distance > 0 ? -0.5 : 0.5);
     }
 }
 
@@ -56,6 +61,11 @@ void Tank::rotateIfPossible(float degrees) {
     this->rotate(degrees);
     if (this->isColliding()) {
         this->rotate(-degrees);
+        // move pixel per pixel until against wall
+        while(!this->isColliding()) {
+            this->rotate(degrees > 0 ? 0.5 : -0.5);
+        }
+        this->rotate(degrees > 0 ? -0.5 : 0.5);
     }
 }
 

@@ -1,6 +1,4 @@
-#ifndef TANKGAME_GAMESTATE_H
-#define TANKGAME_GAMESTATE_H
-
+#pragma once
 #include <list>
 #include <cmath>
 #include "util.h"
@@ -59,6 +57,3 @@ public:
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}  // 9
     };
 };
-
-
-#endif //TANKGAME_GAMESTATE_H

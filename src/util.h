@@ -1,6 +1,4 @@
-#ifndef FUNCTIONS_H_INCLUDED
-#define FUNCTIONS_H_INCLUDED
-
+#pragma once
 #include <chrono>
 
 #define DEBUG false
@@ -15,6 +13,3 @@ struct GridPoint {
 };
 uint64_t timeSinceEpochMillisec();
 Point rotatePoint(Point point, Point pivotPoint, float angleInDegrees);
-
-#endif
-

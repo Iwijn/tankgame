@@ -35,4 +35,5 @@ public:
     void drawGrid();
     void testWallCollision(GameState &gameState);
     void drawCollisionZone(std::list<GridPoint> & neighboringGridPoints);
+    void drawWallCornerPoints(std::list<Point>& cornerPoints);
 };

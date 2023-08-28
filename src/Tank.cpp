@@ -73,7 +73,7 @@ bool Tank::isColliding() {
         return true;
     }
 
-    // check if wall corners of neigboring grid squares are colliding with tank
+    // check if wall corners of neighboring grid squares are colliding with tank
     std::list<GridPoint> neighboringGridSquares;
     // get 3x3 grid of grid squares around tank (less if tank at edge)
     this->getCollisionZoneGridPoints(neighboringGridSquares);

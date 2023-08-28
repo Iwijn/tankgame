@@ -67,4 +67,6 @@ void GameState::getCornerPointsOfWalls(std::list<Point>& cornerPoints, GridPoint
     }
 
     // TODO: these corners can be reduced when there is a horizontal and vertical wall
+
+    if (DEBUG) Debug::GetInstance()->drawWallCornerPoints(cornerPoints);
 }

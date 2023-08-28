@@ -85,3 +85,14 @@ void Debug::drawCollisionZone(std::list<GridPoint> & neighboringGridPoints) {
         window->draw(square);
     }
 }
+
+void Debug::drawWallCornerPoints(std::list<Point>& wallCorners) {
+    sf::CircleShape point;
+    point.setRadius(5);
+    point.setFillColor(sf::Color::Red);
+    point.setOrigin(5, 5);
+    for (auto wallCorner: wallCorners) {
+        point.setPosition(wallCorner.x, wallCorner.y);
+        window->draw(point);
+    }
+}

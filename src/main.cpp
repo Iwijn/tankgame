@@ -13,7 +13,7 @@
 #define TANK_HEIGHT 50
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 50
-#define DEBUG false
+#define DEBUG true
 
 void drawTank(sf::RenderWindow &window, GameState &gameState);
 void drawWalls(sf::RenderWindow &window, GameState &gameState);
@@ -21,7 +21,8 @@ void drawWalls(sf::RenderWindow &window, GameState &gameState);
 int main() {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Game");
-
+    // initialize debug singleton
+    if (DEBUG) Debug::GetInstance(&window);
     GameState gameState(WALL_LENGTH, WALL_THICKNESS, TANK_WIDTH, TANK_HEIGHT);
     Tank tank(gameState);
     gameState.tanks.push_back(&tank);
@@ -58,7 +59,7 @@ int main() {
 
             drawWalls(window, gameState);
             drawTank(window, gameState);
-            if (DEBUG) Debug::GetInstance(&window)->draw(gameState);
+            if (DEBUG) Debug::GetInstance()->draw(gameState);
 
             // Update the window
             window.display();

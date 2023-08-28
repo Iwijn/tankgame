@@ -1,6 +1,7 @@
 #include <iostream>
 #include "GameState.h"
 #include "util.h"
+#include "debug.h"
 
 GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight) {
     this->tanks = std::list<Tank*>();

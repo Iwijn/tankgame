@@ -1,7 +1,6 @@
-#ifndef TANKGAME_TANK_H
-#define TANKGAME_TANK_H
-
+#pragma once
 #include "util.h"
+#include "debug.h"
 #include <cmath>
 #include <vector>
 #include "GameState.h"
@@ -45,6 +44,3 @@ private:
     void rotate(float degrees);
 
 };
-
-
-#endif //TANKGAME_TANK_H

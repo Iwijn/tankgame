@@ -51,9 +51,9 @@ void GameState::getCornerPointsOfWalls(std::list<Point>& cornerPoints, GridPoint
         // top right corner
         cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize + gridSize - 1), float(gridPoint.y * this->gridSize)});
         // bottom right corner
-        cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize + gridSize - 1), float(gridPoint.y * this->gridSize - wallThickness + 1)});
+        cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize + gridSize - 1), float(gridPoint.y * this->gridSize + wallThickness - 1)});
         // bottom left corner
-        cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize), float(gridPoint.y * this->gridSize - wallThickness + 1)});
+        cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize), float(gridPoint.y * this->gridSize + wallThickness - 1)});
     }
     if (this->verticalWalls[gridPoint.y][gridPoint.x]) {
         // top left corner

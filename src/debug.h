@@ -5,10 +5,12 @@
 #define WINDOW_HEIGHT 600
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 50
+#define WALL_LENGTH 50
 #define COLLISION_TESTING false
 
 #include <SFML/Graphics.hpp>
 #include "GameState.h"
+#include "util.h"
 
 class GameState;
 class Tank;
@@ -32,4 +34,5 @@ public:
     void drawCornerPointsOfTanks(GameState &gameState);
     void drawGrid();
     void testWallCollision(GameState &gameState);
+    void drawCollisionZone(std::list<GridPoint> & neighboringGridPoints);
 };

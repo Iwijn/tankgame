@@ -121,6 +121,7 @@ void Tank::getCollisionZoneGridPoints(std::list<GridPoint> &neighboringGridSquar
             }
         }
     }
+    if (DEBUG) Debug::GetInstance()->drawCollisionZone(neighboringGridSquares);
 }
 
 float Tank::getXPos() {

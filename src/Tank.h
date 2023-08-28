@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include "GameState.h"
+#define DEBUG true
 
 class GameState;
 

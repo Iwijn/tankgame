@@ -74,3 +74,14 @@ void Debug::testWallCollision(GameState &gameState) {
         window->draw(point);
     }
 }
+
+void Debug::drawCollisionZone(std::list<GridPoint> & neighboringGridPoints) {
+    sf::RectangleShape square;
+    square.setFillColor(sf::Color::Yellow);
+    square.setSize(sf::Vector2f(WALL_LENGTH, WALL_LENGTH));
+    for (auto gridPoint : neighboringGridPoints) {
+        // draw corner points
+        square.setPosition(gridPoint.x*WALL_LENGTH, gridPoint.y*WALL_LENGTH);
+        window->draw(square);
+    }
+}

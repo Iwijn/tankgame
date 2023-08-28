@@ -14,8 +14,8 @@ Debug *Debug::GetInstance() {
 }
 
 void Debug::draw(GameState &gameState) {
-    drawCornerPointsOfTanks(gameState);
     drawGrid();
+    drawCornerPointsOfTanks(gameState);
     if (COLLISION_TESTING) {
         testWallCollision(gameState);
     }

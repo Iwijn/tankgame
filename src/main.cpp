@@ -76,22 +76,6 @@ void drawTank(sf::RenderWindow &window, GameState &gameState) {
 
     tank.setSize(sf::Vector2f(TANK_WIDTH, TANK_HEIGHT));
     window.draw(tank);
-
-    if (DEBUG) {
-        // draw corner points
-        sf::CircleShape point;
-        point.setRadius(CORNER_MARKER_RADIUS);
-        point.setFillColor(sf::Color::Red);
-        point.setOrigin(CORNER_MARKER_RADIUS, CORNER_MARKER_RADIUS);
-        point.setPosition(gameState.tanks.front()->getTopLeftCorner().x, gameState.tanks.front()->getTopLeftCorner().y);
-        window.draw(point);
-        point.setPosition(gameState.tanks.front()->getTopRightCorner().x, gameState.tanks.front()->getTopRightCorner().y);
-        window.draw(point);
-        point.setPosition(gameState.tanks.front()->getBottomLeftCorner().x, gameState.tanks.front()->getBottomLeftCorner().y);
-        window.draw(point);
-        point.setPosition(gameState.tanks.front()->getBottomRightCorner().x, gameState.tanks.front()->getBottomRightCorner().y);
-        window.draw(point);
-    }
 }
 
 void drawWalls(sf::RenderWindow &window, GameState &gameState) {

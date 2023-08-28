@@ -14,7 +14,6 @@
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 50
 #define DEBUG false
-#define COLLISION_TESTING false
 
 void drawTank(sf::RenderWindow &window, GameState &gameState);
 void drawWalls(sf::RenderWindow &window, GameState &gameState);
@@ -59,13 +58,8 @@ int main() {
 
             drawWalls(window, gameState);
             drawTank(window, gameState);
-            if (DEBUG) {
-                drawCornerPointsOfTanks(window, gameState);
-                drawGrid(window);
-            }
-            if (COLLISION_TESTING) {
-                testWallCollision(window, gameState);
-            }
+            if (DEBUG) Debug::GetInstance(&window)->draw(gameState);
+
             // Update the window
             window.display();
         }

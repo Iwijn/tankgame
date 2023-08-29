@@ -8,8 +8,8 @@ clean:
 
 build-run: all run
 
-all: makeBuildDir main.o GameState.o Tank.o util.o debug.o
-	$(CC) $(CFLAGS) -o build/main build/main.o build/GameState.o build/Tank.o build/util.o build/debug.o
+all: makeBuildDir main.o GameState.o Tank.o IO.o util.o debug.o
+	$(CC) $(CFLAGS) -o build/main build/main.o build/GameState.o build/Tank.o build/IO.o build/util.o build/debug.o
 
 makeBuildDir:
 	mkdir -p build/
@@ -22,6 +22,9 @@ GameState.o: src/GameState.cpp src/GameState.h src/util.h src/debug.h
 
 Tank.o: src/Tank.cpp src/Tank.h src/util.h src/debug.h
 	$(CC) $(CFLAGS) -o build/Tank.o -c src/Tank.cpp
+
+IO.o: src/IO.cpp src/IO.h src/GameState.h
+	$(CC) $(CFLAGS) -o build/IO.o -c src/IO.cpp
 
 util.o: src/util.cpp src/util.h
 	$(CC) $(CFLAGS) -o build/util.o -c src/util.cpp

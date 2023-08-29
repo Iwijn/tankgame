@@ -46,14 +46,16 @@ void IO::clear() {
 }
 
 void IO::drawTanks() {
-    sf::RectangleShape tank;
-    tank.setFillColor(sf::Color::Black);
-    tank.setOrigin(TANK_WIDTH/2, TANK_HEIGHT/2);
-    tank.setPosition(gameState.tanks.front()->getXPos(), gameState.tanks.front()->getYPos());
-    tank.setRotation(gameState.tanks.front()->getRotation());
-
-    tank.setSize(sf::Vector2f(TANK_WIDTH, TANK_HEIGHT));
-    window->draw(tank);
+    sf::RectangleShape rectangle;
+    rectangle.setFillColor(sf::Color::Black);
+    rectangle.setOrigin(TANK_WIDTH/2, TANK_HEIGHT/2);
+    rectangle.setSize(sf::Vector2f(TANK_WIDTH, TANK_HEIGHT));
+    for (auto tank : gameState.tanks) {
+        rectangle.setPosition(tank->getXPos(), tank->getYPos());
+        rectangle.setRotation(tank->getRotation());
+    }
+    
+    window->draw(rectangle);
 }
 
 void IO::drawWalls() {

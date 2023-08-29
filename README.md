@@ -1,3 +1,4 @@
 # Tank Game
 
-Run with `-lsfml-graphics -lsfml-window -lsfml-system` options while sfml is installed.
+Make sure sfml is installed.
+Run with Makefile.

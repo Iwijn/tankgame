@@ -3,6 +3,10 @@
 IO::IO(sf::RenderWindow &window, GameState &gameState) : window(window), gameState(gameState) {
 }
 
+sf::RenderWindow &IO::getWindow() {
+    return window;
+}
+
 bool IO::rightArrowPressed() {
     return sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
 }

@@ -29,7 +29,7 @@ IO.o: src/IO.cpp src/IO.h src/GameState.h
 util.o: src/util.cpp src/util.h
 	$(CC) $(CFLAGS) -o build/util.o -c src/util.cpp
 
-debug.o: src/debug.cpp src/debug.h
+debug.o: src/debug.cpp src/debug.h src/IO.h
 	$(CC) $(CFLAGS) -o build/debug.o -c src/debug.cpp
 
 run:

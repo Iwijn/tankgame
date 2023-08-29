@@ -11,23 +11,25 @@
 #include <SFML/Graphics.hpp>
 #include "GameState.h"
 #include "util.h"
+#include "IO.h"
 
 class GameState;
 class Tank;
+class IO;
 class Debug {
 protected:
-    Debug(const sf::RenderWindow *window)
+    Debug(const IO *io)
     {
-        this->window = const_cast<sf::RenderWindow *>(window);
+        this->io = const_cast<IO *>(io);
     }
 
     static Debug* singleton_;
 
     std::string value_;
-    sf::RenderWindow *window;
+    IO *io;
 
 public:
-    static Debug *GetInstance(const sf::RenderWindow *window);
+    static Debug *GetInstance(const IO *io);
     static Debug *GetInstance();
 
     void draw(GameState &gameState);

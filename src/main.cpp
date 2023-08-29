@@ -9,9 +9,6 @@ int main() {
     // create window
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Game");
 
-    // initialize debug singleton
-    if (DEBUG) Debug::GetInstance(&window);
-
     // initialize game
     GameState gameState(WALL_LENGTH, WALL_THICKNESS, TANK_WIDTH, TANK_HEIGHT);
     Tank tank(gameState);
@@ -19,6 +16,9 @@ int main() {
 
     // make IO object
     IO io(window, gameState);
+
+    // initialize debug singleton
+    if (DEBUG) Debug::GetInstance(&io);
 
     // game loop
     while (io.gameIsRunning())

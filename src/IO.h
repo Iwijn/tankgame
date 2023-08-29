@@ -3,12 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include "GameState.h"
 
+class GameState;
 class IO {
 private:
     sf::RenderWindow &window;
     GameState &gameState;
 public:
     IO(sf::RenderWindow &window, GameState &gameState);
+    // should only be used publicly for debug purposes.
+    sf::RenderWindow &getWindow();
+
     bool rightArrowPressed();
     bool leftArrowPressed();
     bool upArrowPressed();

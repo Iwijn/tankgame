@@ -1,10 +1,10 @@
 #include "debug.h"
 
 Debug *Debug::singleton_ = nullptr;
-Debug *Debug::GetInstance(const sf::RenderWindow *window)
+Debug *Debug::GetInstance(const IO *io)
 {
     if(singleton_ == nullptr){
-        singleton_ = new Debug(window);
+        singleton_ = new Debug(io);
     }
     return singleton_;
 }
@@ -29,13 +29,13 @@ void Debug::drawCornerPointsOfTanks(GameState &gameState) {
     for (auto tank : gameState.tanks) {
         // draw corner points
         point.setPosition(tank->getTopLeftCorner().x, tank->getTopLeftCorner().y);
-        window->draw(point);
+        io->getWindow().draw(point);
         point.setPosition(tank->getTopRightCorner().x, tank->getTopRightCorner().y);
-        window->draw(point);
+        io->getWindow().draw(point);
         point.setPosition(tank->getBottomLeftCorner().x, tank->getBottomLeftCorner().y);
-        window->draw(point);
+        io->getWindow().draw(point);
         point.setPosition(tank->getBottomRightCorner().x, tank->getBottomRightCorner().y);
-        window->draw(point);
+        io->getWindow().draw(point);
     }
 
 }
@@ -47,13 +47,13 @@ void Debug::drawGrid() {
     for (int i = 0; i < WINDOW_WIDTH/WALL_LENGTH; i++) {
         line[0].position = sf::Vector2f(i*WALL_LENGTH, 0);
         line[1].position = sf::Vector2f(i*WALL_LENGTH, WINDOW_HEIGHT);
-        window->draw(line, 2, sf::Lines);
+        io->getWindow().draw(line, 2, sf::Lines);
     }
 
     for (int i = 0; i < WINDOW_HEIGHT/WALL_LENGTH; i++) {
         line[0].position = sf::Vector2f(0, i*WALL_LENGTH);
         line[1].position = sf::Vector2f(WINDOW_WIDTH, i*WALL_LENGTH);
-        window->draw(line, 2, sf::Lines);
+        io->getWindow().draw(line, 2, sf::Lines);
     }
 }
 
@@ -71,7 +71,7 @@ void Debug::testWallCollision(GameState &gameState) {
         }
         point.setOrigin(1, 1);
         point.setPosition(x, y);
-        window->draw(point);
+        io->getWindow().draw(point);
     }
 }
 
@@ -82,7 +82,7 @@ void Debug::drawCollisionZone(std::list<GridPoint> & neighboringGridPoints) {
     for (auto gridPoint : neighboringGridPoints) {
         // draw corner points
         square.setPosition(gridPoint.x*WALL_LENGTH, gridPoint.y*WALL_LENGTH);
-        window->draw(square);
+        io->getWindow().draw(square);
     }
 }
 
@@ -93,6 +93,6 @@ void Debug::drawWallCornerPoints(std::list<Point>& wallCorners) {
     point.setOrigin(5, 5);
     for (auto wallCorner: wallCorners) {
         point.setPosition(wallCorner.x, wallCorner.y);
-        window->draw(point);
+        io->getWindow().draw(point);
     }
 }

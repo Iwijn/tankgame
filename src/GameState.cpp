@@ -3,13 +3,14 @@
 #include "util.h"
 #include "debug.h"
 
-GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight) {
+GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight): map(10, 10) {
     this->tanks = std::list<Tank*>();
     this->prevLoopTime=timeSinceEpochMillisec();
     this->gridSize=gridSize;
     this->wallThickness=wallThickness;
     this->defaultTankWidth=defaultTankWidth;
     this->defaultTankHeight=defaultTankHeight;
+    this->map.generateMap();
 }
 
 GridPoint GameState::getGridPoint(Point point) {
@@ -23,7 +24,7 @@ bool GameState::isWall(Point point) {
     GridPoint gridPoint = getGridPoint(point);
 
     // if there is no horizontal or vertical wall in the square, then there is no wall
-    if (!this->horizontalWalls[gridPoint.y][gridPoint.x] && !this->verticalWalls[gridPoint.y][gridPoint.x]) {
+    if (!this->map.isHWall(gridPoint) && !this->map.isVWall(gridPoint)) {
         return false;
     }
 
@@ -33,11 +34,11 @@ bool GameState::isWall(Point point) {
 
 
     // the horizontal wall of a square is at the top of the square
-    if (this->horizontalWalls[gridPoint.y][gridPoint.x] && inGridY < this->wallThickness) {
+    if (this->map.isHWall(gridPoint) && inGridY < this->wallThickness) {
         return true;
     }
     // the vertical wall of a square is at the left of the square
-    if (this->verticalWalls[gridPoint.y][gridPoint.x] && inGridX < this->wallThickness) {
+    if (this->map.isVWall(gridPoint) && inGridX < this->wallThickness) {
         return true;
     }
 
@@ -45,7 +46,7 @@ bool GameState::isWall(Point point) {
 }
 
 void GameState::getCornerPointsOfWalls(std::list<Point>& cornerPoints, GridPoint gridPoint) {
-    if (this->horizontalWalls[gridPoint.y][gridPoint.x]) {
+    if (this->map.isHWall(gridPoint)) {
         // top left corner
         cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize), float(gridPoint.y * this->gridSize)});
         // top right corner
@@ -55,7 +56,7 @@ void GameState::getCornerPointsOfWalls(std::list<Point>& cornerPoints, GridPoint
         // bottom left corner
         cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize), float(gridPoint.y * this->gridSize + wallThickness - 1)});
     }
-    if (this->verticalWalls[gridPoint.y][gridPoint.x]) {
+    if (this->map.isVWall(gridPoint)) {
         // top left corner
         cornerPoints.push_back(Point {float(gridPoint.x * this->gridSize), float(gridPoint.y * this->gridSize)});
         // top right corner

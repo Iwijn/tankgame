@@ -54,7 +54,7 @@ void IO::drawTanks() {
         rectangle.setPosition(tank->getXPos(), tank->getYPos());
         rectangle.setRotation(tank->getRotation());
     }
-    
+
     window->draw(rectangle);
 }
 
@@ -63,23 +63,19 @@ void IO::drawWalls() {
     wall.setFillColor(sf::Color::Black);
 
     wall.setSize(sf::Vector2f(WALL_LENGTH, WALL_THICKNESS));
-    int horizontalWallsRows = sizeof(gameState.horizontalWalls) / sizeof(gameState.horizontalWalls[0]);
-    int horizontalWallsColumns = sizeof(gameState.horizontalWalls[0]) / sizeof(gameState.horizontalWalls[0][0]);
-    for (int y = 0; y < horizontalWallsRows; y++) {
-        for (int x = 0; x < horizontalWallsColumns; x++) {
-            if (gameState.horizontalWalls[y][x] == 1) {
+    for (int y = 0; y < gameState.map.height; y++) {
+        for (int x = 0; x < gameState.map.width; x++) {
+            if (gameState.map.isHWall(GridPoint {x, y})) {
                 wall.setPosition(x*WALL_LENGTH, y*WALL_LENGTH);
                 window->draw(wall);
             }
         }
     }
 
-    int verticalWallsRows = sizeof(gameState.verticalWalls) / sizeof(gameState.verticalWalls[0]);
-    int verticalWallsColumns = sizeof(gameState.verticalWalls[0]) / sizeof(gameState.verticalWalls[0][0]);
     wall.setSize(sf::Vector2f(WALL_THICKNESS, WALL_LENGTH));
-    for (int y = 0; y < verticalWallsRows; y++) {
-        for (int x = 0; x < verticalWallsColumns; x++) {
-            if (gameState.verticalWalls[y][x] == 1) {
+    for (int y = 0; y < gameState.map.height; y++) {
+        for (int x = 0; x < gameState.map.width; x++) {
+            if (gameState.map.isVWall(GridPoint {x, y})) {
                 wall.setPosition(x*WALL_LENGTH, y*WALL_LENGTH);
                 window->draw(wall);
             }

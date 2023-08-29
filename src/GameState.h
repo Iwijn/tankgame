@@ -3,6 +3,7 @@
 #include <cmath>
 #include "util.h"
 #include "Tank.h"
+#include "Map.h"
 
 class Tank;
 
@@ -12,6 +13,7 @@ public:
     uint64_t prevLoopTime;
     int gridSize;
     int wallThickness;
+    Map map;
     GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight);
     float defaultTankWidth;
     float defaultTankHeight;
@@ -20,18 +22,6 @@ public:
     bool isWall(Point point);
     void getCornerPointsOfWalls(std::list<Point>& cornerPoints, GridPoint gridPoint);
 
-    int horizontalWalls4[4][4] = {
-            {1, 1, 1, 1},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
-            {1, 1, 1, 1}
-    };
-    int verticalWalls4[4][4] = {
-            {1, 0, 0, 1},
-            {1, 0, 0, 1},
-            {1, 0, 0, 1},
-            {1, 0, 0, 1}
-    };
     int horizontalWalls[10][10] = {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 0}, // 0
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 1

@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "GameState.h"
+#include "util.h"
 
 class GameState;
 class IO {

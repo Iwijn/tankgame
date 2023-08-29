@@ -1,7 +1,7 @@
 #include "debug.h"
 
 Debug *Debug::singleton_ = nullptr;
-Debug *Debug::GetInstance(const IO *io)
+Debug *Debug::GetInstance(IO *io)
 {
     if(singleton_ == nullptr){
         singleton_ = new Debug(io);

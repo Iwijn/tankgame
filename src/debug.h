@@ -10,9 +10,9 @@ class Tank;
 class IO;
 class Debug {
 protected:
-    Debug(const IO *io)
+    Debug(IO *io)
     {
-        this->io = const_cast<IO *>(io);
+        this->io = io;
     }
 
     static Debug* singleton_;
@@ -21,7 +21,7 @@ protected:
     IO *io;
 
 public:
-    static Debug *GetInstance(const IO *io);
+    static Debug *GetInstance(IO *io);
     static Debug *GetInstance();
 
     void draw(GameState &gameState);

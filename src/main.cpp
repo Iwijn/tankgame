@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "debug.h"
 #include "IO.h"
+#include "util.h"
 
 int main() {
     // initialize game

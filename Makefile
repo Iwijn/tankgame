@@ -25,13 +25,13 @@ Tank.o: src/Tank.cpp src/Tank.h src/util.h src/debug.h
 	$(CC) $(CFLAGS) -o build/Tank.o -c src/Tank.cpp
 
 IO.o: src/IO.cpp src/IO.h src/GameState.h
-	$(CC) $(CFLAGS) $(SFMLFLAGS) -o build/IO.o -c src/IO.cpp
+	$(CC) $(CFLAGS) -o build/IO.o -c src/IO.cpp
 
 util.o: src/util.cpp src/util.h
 	$(CC) $(CFLAGS) -o build/util.o -c src/util.cpp
 
 debug.o: src/debug.cpp src/debug.h src/IO.h
-	$(CC) $(CFLAGS) $(SFMLFLAGS) -o build/debug.o -c src/debug.cpp
+	$(CC) $(CFLAGS) -o build/debug.o -c src/debug.cpp
 
 run:
 	./build/main

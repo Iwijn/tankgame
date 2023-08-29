@@ -11,6 +11,7 @@
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 50
 #define DEBUG false
+#define COLLISION_TESTING false
 
 struct Point {
     float x;

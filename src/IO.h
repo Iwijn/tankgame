@@ -6,10 +6,11 @@
 class GameState;
 class IO {
 private:
-    sf::RenderWindow &window;
+    sf::RenderWindow *window;
     GameState &gameState;
 public:
-    IO(sf::RenderWindow &window, GameState &gameState);
+    explicit IO(GameState &gameState);
+    ~IO();
     // should only be used publicly for debug purposes.
     sf::RenderWindow &getWindow();
 

@@ -23,9 +23,9 @@ void Debug::draw(GameState &gameState) {
 
 void Debug::drawCornerPointsOfTanks(GameState &gameState) {
     sf::CircleShape point;
-    point.setRadius(CORNER_MARKER_RADIUS);
+    point.setRadius(2);
     point.setFillColor(sf::Color::Red);
-    point.setOrigin(CORNER_MARKER_RADIUS, CORNER_MARKER_RADIUS);
+    point.setOrigin(2, 2);
     for (auto tank : gameState.tanks) {
         // draw corner points
         point.setPosition(tank->getTopLeftCorner().x, tank->getTopLeftCorner().y);

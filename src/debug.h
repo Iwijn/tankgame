@@ -1,13 +1,5 @@
 #pragma once
 
-#define CORNER_MARKER_RADIUS 2
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
-#define WALL_THICKNESS 10
-#define WALL_LENGTH 50
-#define WALL_LENGTH 50
-#define COLLISION_TESTING false
-
 #include <SFML/Graphics.hpp>
 #include "GameState.h"
 #include "util.h"

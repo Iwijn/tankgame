@@ -1,10 +1,14 @@
 #include "IO.h"
 
-IO::IO(sf::RenderWindow &window, GameState &gameState) : window(window), gameState(gameState) {
+IO::IO(GameState &gameState): gameState(gameState) {
+    this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Game");
+}
+IO::~IO() {
+    delete window;
 }
 
 sf::RenderWindow &IO::getWindow() {
-    return window;
+    return *window;
 }
 
 bool IO::rightArrowPressed() {
@@ -24,21 +28,21 @@ bool IO::downArrowPressed() {
 }
 
 bool IO::gameIsRunning() {
-    return window.isOpen();
+    return window->isOpen();
 }
 
 void IO::processEvents() {
     // close window if needed
     sf::Event event;
-    while (window.pollEvent(event))
+    while (window->pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
-            window.close();
+            window->close();
     }
 }
 
 void IO::clear() {
-    window.clear(sf::Color::White);
+    window->clear(sf::Color::White);
 }
 
 void IO::drawTanks() {
@@ -49,7 +53,7 @@ void IO::drawTanks() {
     tank.setRotation(gameState.tanks.front()->getRotation());
 
     tank.setSize(sf::Vector2f(TANK_WIDTH, TANK_HEIGHT));
-    window.draw(tank);
+    window->draw(tank);
 }
 
 void IO::drawWalls() {
@@ -63,7 +67,7 @@ void IO::drawWalls() {
         for (int x = 0; x < horizontalWallsColumns; x++) {
             if (gameState.horizontalWalls[y][x] == 1) {
                 wall.setPosition(x*WALL_LENGTH, y*WALL_LENGTH);
-                window.draw(wall);
+                window->draw(wall);
             }
         }
     }
@@ -75,12 +79,12 @@ void IO::drawWalls() {
         for (int x = 0; x < verticalWallsColumns; x++) {
             if (gameState.verticalWalls[y][x] == 1) {
                 wall.setPosition(x*WALL_LENGTH, y*WALL_LENGTH);
-                window.draw(wall);
+                window->draw(wall);
             }
         }
     }
 }
 
 void IO::display() {
-    window.display();
+    window->display();
 }

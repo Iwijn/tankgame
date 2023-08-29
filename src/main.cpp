@@ -1,21 +1,17 @@
 #include <cmath>
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include "GameState.h"
 #include "debug.h"
 #include "IO.h"
 
 int main() {
-    // create window
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Game");
-
     // initialize game
     GameState gameState(WALL_LENGTH, WALL_THICKNESS, TANK_WIDTH, TANK_HEIGHT);
     Tank tank(gameState);
     gameState.tanks.push_back(&tank);
 
     // make IO object
-    IO io(window, gameState);
+    IO io(gameState);
 
     // initialize debug singleton
     if (DEBUG) Debug::GetInstance(&io);

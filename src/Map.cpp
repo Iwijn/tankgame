@@ -12,26 +12,63 @@ Map::~Map() {
     delete[] this->verticalWalls;
 }
 
-void Map::generateMap() {
+void Map::clearMap() {
     for (auto i = 0; i < this->width * this->height; i++) {
         this->horizontalWalls[i] = 0;
         this->verticalWalls[i] = 0;
     }
+}
+
+void Map::setHWall(GridPoint point) {
+    this->horizontalWalls[point.y*this->width + point.x] = 1;
+}
+
+void Map::setVWall(GridPoint point) {
+    this->verticalWalls[point.y*this->width + point.x] = 1;
+}
+
+void Map::addBorders() {
+    for (auto i = 0; i < this->width - 1; i++) {
+        this->horizontalWalls[i] = 1;
+        this->horizontalWalls[(this->height-1)*this->width + i] = 1;
+    }
+    for (auto i = 0; i < this->height - 1; i++) {
+        this->verticalWalls[i*this->width] = 1;
+        this->verticalWalls[i*this->width + this->width-1] = 1;
+    }
+}
+
+void Map::generateRandomMap() {
+    clearMap();
+    addBorders();
 
     // generate random horizontal walls
-    for (auto i = 0; i < this->width * this->height; i++) {
-        if (random() % 5 == 0) {
-            this->horizontalWalls[i] = 1;
+    // first row (y=0) is a horizontal border
+    // last row (y=this->height-1) is a horizontal border
+    // last column (x=this->width-1) is used for a vertical border
+    for (auto x = 0; x < this->width - 1; x++) {
+        for (auto y = 1; y < this->height - 1; y++) {
+            if (random() % 5 == 0) {
+                this->setHWall(GridPoint {x, y});
+            }
         }
     }
     // generate random vertical walls
-    for (auto i = 0; i < this->width * this->height; i++) {
-        if (random() % 5 == 0) {
-            this->verticalWalls[i] = 1;
+    // first column (x=0) is a vertical border
+    // last column (x=this->width-1) is a vertical border
+    // last row (y=this->height-1) is used for a horizontal border
+    for (auto x = 1; x < this->width - 1; x++) {
+        for (auto y = 0; y < this->height - 1; y++) {
+            if (random() % 5 == 0) {
+                this->setVWall(GridPoint {x, y});
+            }
         }
     }
 }
 
+void Map::generateMap() {
+
+}
 
 bool Map::isHWall(GridPoint point) {
     if (DEBUG) {
@@ -44,6 +81,7 @@ bool Map::isHWall(GridPoint point) {
     }
     return this->horizontalWalls[point.y*this->width + point.x] == 1;
 }
+
 bool Map::isVWall(GridPoint point) {
     if (DEBUG) {
         int x = point.x;

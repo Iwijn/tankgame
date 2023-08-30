@@ -3,14 +3,14 @@
 #include "util.h"
 #include "debug.h"
 
-GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight): map(10, 10) {
+GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight): map(15, 20) {
     this->tanks = std::list<Tank*>();
     this->prevLoopTime=timeSinceEpochMillisec();
     this->gridSize=gridSize;
     this->wallThickness=wallThickness;
     this->defaultTankWidth=defaultTankWidth;
     this->defaultTankHeight=defaultTankHeight;
-    this->map.generateMap();
+    this->map.generateRandomMap();
 }
 
 GridPoint GameState::getGridPoint(Point point) {

@@ -14,7 +14,7 @@ Debug *Debug::GetInstance() {
 }
 
 void Debug::draw(GameState &gameState) {
-    drawGrid();
+    drawGrid(gameState);
     drawCornerPointsOfTanks(gameState);
     if (COLLISION_TESTING) {
         testWallCollision(gameState);
@@ -40,19 +40,19 @@ void Debug::drawCornerPointsOfTanks(GameState &gameState) {
 
 }
 
-void Debug::drawGrid() {
+void Debug::drawGrid(GameState &gameState) {
     sf::Vertex line[2];
     line[0].color = sf::Color::Blue;
     line[1].color = sf::Color::Blue;
-    for (int i = 0; i < WINDOW_WIDTH/WALL_LENGTH; i++) {
+    for (int i = 0; i < gameState.map.width; i++) {
         line[0].position = sf::Vector2f(i*WALL_LENGTH, 0);
-        line[1].position = sf::Vector2f(i*WALL_LENGTH, WINDOW_HEIGHT);
+        line[1].position = sf::Vector2f(i*WALL_LENGTH, gameState.map.height*WALL_LENGTH);
         io->getWindow().draw(line, 2, sf::Lines);
     }
 
-    for (int i = 0; i < WINDOW_HEIGHT/WALL_LENGTH; i++) {
+    for (int i = 0; i < gameState.map.height; i++) {
         line[0].position = sf::Vector2f(0, i*WALL_LENGTH);
-        line[1].position = sf::Vector2f(WINDOW_WIDTH, i*WALL_LENGTH);
+        line[1].position = sf::Vector2f(gameState.map.width*WALL_LENGTH, i*WALL_LENGTH);
         io->getWindow().draw(line, 2, sf::Lines);
     }
 }

@@ -26,7 +26,7 @@ public:
 
     void draw(GameState &gameState);
     void drawCornerPointsOfTanks(GameState &gameState);
-    void drawGrid();
+    void drawGrid(GameState &gameState);
     void testWallCollision(GameState &gameState);
     void drawCollisionZone(std::list<GridPoint> & neighboringGridPoints);
     void drawWallCornerPoints(std::list<Point>& cornerPoints);

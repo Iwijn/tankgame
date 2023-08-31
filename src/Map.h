@@ -3,6 +3,8 @@
 
 #include "util.h"
 
+enum Direction {NORTH, EAST, SOUTH, WEST};
+
 class Map {
 private:
     int* horizontalWalls;
@@ -11,6 +13,11 @@ private:
     void addBorders();
     void setHWall(GridPoint point);
     void setVWall(GridPoint point);
+    void addRandomTreeStructure(GridPoint start, Direction direction);
+    void goForward(GridPoint &location, Direction direction);
+    void goLeft(GridPoint &location, Direction &direction);
+    void goRight(GridPoint &location, Direction &direction);
+    GridPoint getTreeStartPoint(Direction treeDirection);
 public:
     int width;
     int height;
@@ -21,3 +28,4 @@ public:
     bool isHWall(GridPoint point);
     bool isVWall(GridPoint point);
 };
+

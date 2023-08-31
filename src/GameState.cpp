@@ -10,7 +10,7 @@ GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, fl
     this->wallThickness=wallThickness;
     this->defaultTankWidth=defaultTankWidth;
     this->defaultTankHeight=defaultTankHeight;
-    this->map.generateRandomMap();
+    this->map.generateMap();
 }
 
 GridPoint GameState::getGridPoint(Point point) {

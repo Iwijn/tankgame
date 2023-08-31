@@ -6,6 +6,7 @@ Map::Map(int width, int height) {
     this->height = height;
     this->horizontalWalls = new int[this->width * this->height];
     this->verticalWalls = new int[this->width * this->height];
+    srand(timeSinceEpochMillisec());
 }
 Map::~Map() {
     delete[] this->horizontalWalls;
@@ -67,8 +68,123 @@ void Map::generateRandomMap() {
 }
 
 void Map::generateMap() {
-
+    clearMap();
+    addBorders();
+    GridPoint startPoint = getTreeStartPoint(SOUTH);
+    addRandomTreeStructure(startPoint, SOUTH);
 }
+
+GridPoint Map::getTreeStartPoint(Direction treeDirection) {
+    GridPoint start;
+    switch (treeDirection) {
+        case NORTH:
+            start = GridPoint {(int(random()) % (this->width-2) + 1), this->height-2};
+            this->setVWall(start);
+            return start;
+        case EAST:
+            start = GridPoint {0, (int(random()) % (this->height-2) + 1)};
+            this->setHWall(start);
+            return start;
+        case SOUTH:
+            start = GridPoint {(int(random()) % (this->width-2) + 1), 0};
+            this->setVWall(start);
+            return start;
+        case WEST:
+            start = GridPoint {this->width-2, (int(random()) % (this->height-2) + 1)};
+            this->setHWall(start);
+            return start;
+    }
+}
+
+void Map::addRandomTreeStructure(GridPoint location, Direction direction) {
+    int i = 0;
+    while (i < 15) {
+        int randomNum = random() % 10;
+        switch (randomNum) {
+            case 5:
+                goLeft(location, direction);
+                break;
+            case 6:
+                goRight(location, direction);
+                break;
+            default:
+                goForward(location, direction);
+                break;
+        }
+        i++;
+    }
+}
+
+
+void Map::goForward(GridPoint &location, Direction direction) {
+    switch (direction) {
+        case NORTH:
+            location = GridPoint {location.x, location.y-1};
+            this->setVWall(location);
+            break;
+        case EAST:
+            location = GridPoint {location.x+1, location.y};
+            this->setHWall(location);
+            break;
+        case SOUTH:
+            location = GridPoint {location.x, location.y+1};
+            this->setVWall(location);
+            break;
+        case WEST:
+            location = GridPoint {location.x-1, location.y};
+            this->setHWall(location);
+            break;
+    }
+}
+
+void Map::goLeft(GridPoint &location, Direction &direction) {
+    switch (direction) {
+        case NORTH:
+            location = GridPoint {location.x-1, location.y};
+            this->setHWall(location);
+            direction = WEST;
+            break;
+        case EAST:
+            location = GridPoint {location.x+1, location.y-1};
+            this->setVWall(location);
+            direction = NORTH;
+            break;
+        case SOUTH:
+            location = GridPoint {location.x, location.y+1};
+            this->setHWall(location);
+            direction = EAST;
+            break;
+        case WEST:
+            this->setVWall(location);
+            direction = SOUTH;
+            break;
+    }
+}
+
+void Map::goRight(GridPoint &location, Direction &direction) {
+    switch (direction) {
+        case NORTH:
+            this->setHWall(location);
+            direction = EAST;
+            break;
+        case EAST:
+            location = GridPoint {location.x+1, location.y};
+            this->setVWall(location);
+            direction = SOUTH;
+            break;
+        case SOUTH:
+            location = GridPoint {location.x-1, location.y+1};
+            this->setHWall(location);
+            direction = WEST;
+            break;
+        case WEST:
+            location = GridPoint {location.x, location.y-1};
+            this->setVWall(location);
+            direction = NORTH;
+            break;
+    }
+}
+
 
 bool Map::isHWall(GridPoint point) {
     if (DEBUG) {

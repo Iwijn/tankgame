@@ -3,7 +3,7 @@
 #include "util.h"
 #include "debug.h"
 
-GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight): map(15, 20) {
+GameState::GameState(int gridSize, int wallThickness, float defaultTankWidth, float defaultTankHeight): map(16, 18) {
     this->tanks = std::list<Tank*>();
     this->prevLoopTime=timeSinceEpochMillisec();
     this->gridSize=gridSize;

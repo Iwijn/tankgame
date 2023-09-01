@@ -13,6 +13,10 @@ Map::~Map() {
     delete[] this->verticalWalls;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// PRIVATE METHODS
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 void Map::clearMap() {
     for (auto i = 0; i < this->width * this->height; i++) {
         this->horizontalWalls[i] = 0;
@@ -46,6 +50,148 @@ void Map::addBorders() {
         this->verticalWalls[i*this->width + this->width-1] = 1;
     }
 }
+
+GridPoint Map::getRandomStartPointOnBorder(Direction treeDirection) {
+    switch (treeDirection) {
+        case NORTH:
+            return GridPoint {(int(random()) % (this->width-2) + 1), this->height-2};
+        case EAST:
+            return GridPoint {0, (int(random()) % (this->height-2) + 1)};
+        case SOUTH:
+            return GridPoint {(int(random()) % (this->width-2) + 1), 0};
+        case WEST:
+            return GridPoint {this->width-2, (int(random()) % (this->height-2) + 1)};
+    }
+}
+GridPoint Map::getTreeStartPoint(Direction treeDirection) {
+    GridPoint start;
+    bool isHorizontal = directionIsHorizontal(treeDirection);
+    int regenTries = 0;
+    int maxRegenTries = 20;
+    do {
+        start = getRandomStartPointOnBorder(treeDirection);
+        regenTries++;
+    } while (this->nrOfOtherWallsTouching(start, isHorizontal) > 2 && regenTries < maxRegenTries);
+    return start;
+}
+
+
+void Map::addRandomTreeStructure(GridPoint location, Direction direction) {
+    // a wall starting from a border always has 2 walls (part of the border) touching it
+    // if there are more than 2, then the start point of the tree will be touching another tree, so don't start the tree
+    if (nrOfOtherWallsTouching(location, directionIsHorizontal(direction)) > 2) {
+        return;
+    }
+
+    int i = 0;
+    this->setWall(location, directionIsHorizontal(direction));
+    while (i < 50) {
+        int randomNum = random() % 5;
+        switch (randomNum) {
+            case 0:
+                goLeft(location, direction);
+                break;
+            case 1:
+                goRight(location, direction);
+                break;
+            default:
+                goForward(location, direction);
+                break;
+        }
+        i++;
+    }
+}
+
+GridPoint forwardDeltas[4] = {
+        {0, -1}, {1, 0}, {0, 1}, {-1, 0}
+};
+void Map::goForward(GridPoint &location, Direction direction) {
+    GridPoint newWallLocation = location + forwardDeltas[direction];
+    // going forward => direction stays the same
+    bool isHorizontal = directionIsHorizontal(direction);
+    if (this->wallExtensionIsPossible(newWallLocation, isHorizontal)) {
+        this->setWall(newWallLocation, isHorizontal);
+        location = newWallLocation;
+    }
+}
+
+GridPoint turnLeftDeltas[4] = {
+        {-1, 0}, {1, -1}, {0, 1}, {0, 0}
+};
+void Map::goLeft(GridPoint &location, Direction &direction) {
+    GridPoint newWallLocation = location + turnLeftDeltas[direction];
+    // current direction horizontal => vertical after turning left (and vice versa)
+    bool isHorizontal = !directionIsHorizontal(direction);
+    if (wallExtensionIsPossible(newWallLocation, isHorizontal)) {
+        this->setWall(newWallLocation, isHorizontal);
+        location = newWallLocation;
+        --direction;
+    }
+}
+
+GridPoint turnRightDeltas[4] = {
+        {0, 0}, {1, 0}, {-1, 1}, {0, -1}
+};
+void Map::goRight(GridPoint &location, Direction &direction) {
+    GridPoint newWallLocation = location + turnRightDeltas[direction];
+    // current direction horizontal => vertical after turning right (and vice versa)
+    bool isHorizontal = !directionIsHorizontal(direction);
+    if (wallExtensionIsPossible(newWallLocation, isHorizontal)) {
+        this->setWall(newWallLocation, isHorizontal);
+        location = newWallLocation;
+        ++direction;
+    }
+}
+
+bool Map::wallExtensionIsPossible(GridPoint wallLocation, bool isHorizontal) {
+    return this->nrOfOtherWallsTouching(wallLocation, isHorizontal) <= 1
+           && this->wallWithinBorders(wallLocation, isHorizontal);
+}
+
+int Map::nrOfOtherWallsTouching(GridPoint point, bool isHorizontal) {
+    if (isHorizontal) {
+        return
+            this->isVWall(point) +
+            this->isHWall(GridPoint {point.x+1, point.y}) + this->isVWall(GridPoint {point.x+1, point.y}) +
+            this->isVWall(GridPoint {point.x, point.y-1}) +
+            this->isHWall(GridPoint {point.x-1, point.y}) +
+            this->isVWall(GridPoint {point.x+1, point.y-1});
+    } else {
+        return
+            this->isHWall(point) +
+            this->isHWall(GridPoint {point.x, point.y+1}) + this->isVWall(GridPoint {point.x, point.y+1}) +
+            this->isVWall(GridPoint {point.x, point.y-1}) +
+            this->isHWall(GridPoint {point.x-1, point.y}) +
+            this->isHWall(GridPoint {point.x-1, point.y+1});
+    }
+}
+
+bool Map::wallWithinBorders(GridPoint point, bool isHorizontal) {
+    if (isHorizontal) {
+        return point.x >= 0 && point.x < this->width - 1 && point.y >= 1 && point.y < this->height-2;
+    } else {
+        return point.x >= 1 && point.x < this->width - 2 && point.y >= 0 && point.y < this->height-1;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// PUBLIC METHODS
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool Map::isHWall(GridPoint point) {
+    if (point.x < 0 || point.x >= this->width || point.y < 0 || point.y >= this->height) {
+        return false;
+    }
+    return this->horizontalWalls[point.y*this->width + point.x] == 1;
+}
+
+bool Map::isVWall(GridPoint point) {
+    if (point.x < 0 || point.x >= this->width || point.y < 0 || point.y >= this->height) {
+        return false;
+    }
+    return this->verticalWalls[point.y*this->width + point.x] == 1;
+}
+
 
 void Map::generateRandomMap() {
     clearMap();
@@ -86,190 +232,4 @@ void Map::generateMap() {
     addRandomTreeStructure(getTreeStartPoint(EAST), EAST);
     addRandomTreeStructure(getTreeStartPoint(SOUTH), SOUTH);
     addRandomTreeStructure(getTreeStartPoint(WEST), WEST);
-}
-
-GridPoint Map::getTreeStartPoint(Direction treeDirection) {
-    GridPoint start;
-    bool isHorizontal = this->wallWithDirectionIsHorizontal(treeDirection);
-    int regenTries = 0;
-    int maxRegenTries = 200;
-    switch (treeDirection) {
-        case NORTH:
-            do {
-                start = GridPoint {(int(random()) % (this->width-2) + 1), this->height-2};
-                regenTries++;
-            } while (this->nrOfOtherWallsTouching(start, isHorizontal) > 1 && regenTries < maxRegenTries);
-            return start;
-        case EAST:
-            do {
-                start = GridPoint {0, (int(random()) % (this->height-2) + 1)};
-                regenTries++;
-            } while (this->nrOfOtherWallsTouching(start, isHorizontal) > 1 && regenTries < maxRegenTries);
-            return start;
-        case SOUTH:
-            do {
-                start = GridPoint {(int(random()) % (this->width-2) + 1), 0};
-                regenTries++;
-            } while (this->nrOfOtherWallsTouching(start, isHorizontal) > 1 && regenTries < maxRegenTries);
-            return start;
-        case WEST:
-            do {
-                start = GridPoint {this->width-2, (int(random()) % (this->height-2) + 1)};
-                regenTries++;
-            } while (this->nrOfOtherWallsTouching(start, isHorizontal) > 1 && regenTries < maxRegenTries);
-            return start;
-    }
-}
-
-
-void Map::addRandomTreeStructure(GridPoint location, Direction direction) {
-    // a wall starting from a border always has 2 walls (part of the border) touching it
-    // if there are more than 2, then the start point of the tree will be touching another tree, so don't start the tree
-    if (nrOfOtherWallsTouching(location, this->wallWithDirectionIsHorizontal(direction)) > 2) {
-        return;
-    }
-
-    int i = 0;
-    this->setWall(location, this->wallWithDirectionIsHorizontal(direction));
-    while (i < 50) {
-        int randomNum = random() % 5;
-        switch (randomNum) {
-            case 0:
-                goLeft(location, direction);
-                break;
-            case 1:
-                goRight(location, direction);
-                break;
-            default:
-                goForward(location, direction);
-                break;
-        }
-        i++;
-    }
-}
-
-bool Map::extendWallIfPossible(GridPoint point, bool isHorizontal, GridPoint &oldPoint) {
-    if (this->nrOfOtherWallsTouching(point, isHorizontal) > 1 || !this->wallWithinBorders(point, isHorizontal)) {
-        return false;
-    }
-    this->setWall(point, isHorizontal);
-    oldPoint = point;
-    return true;
-}
-
-void Map::goForward(GridPoint &location, Direction direction) {
-    bool isHorizontal = this->wallWithDirectionIsHorizontal(direction);
-    switch (direction) {
-        case NORTH:
-            extendWallIfPossible(GridPoint {location.x, location.y-1}, isHorizontal, location);
-            return;
-        case EAST:
-            extendWallIfPossible(GridPoint {location.x+1, location.y}, isHorizontal, location);
-            return;
-        case SOUTH:
-            extendWallIfPossible(GridPoint {location.x, location.y+1}, isHorizontal, location);
-            return;
-        case WEST:
-            extendWallIfPossible(GridPoint {location.x-1, location.y}, isHorizontal, location);
-            return;
-    }
-}
-
-void Map::goLeft(GridPoint &location, Direction &direction) {
-    // if the wall is horizontal, then the new wall will be vertical and vice versa
-    bool isHorizontal = !this->wallWithDirectionIsHorizontal(direction);
-    switch (direction) {
-        case NORTH:
-            if (extendWallIfPossible(GridPoint {location.x-1, location.y}, isHorizontal, location)) {
-                direction = WEST;
-            }
-            return;
-        case EAST:
-            if (extendWallIfPossible(GridPoint {location.x+1, location.y-1}, isHorizontal, location)) {
-                direction = NORTH;
-            }
-            return;
-        case SOUTH:
-            if (extendWallIfPossible(GridPoint {location.x, location.y+1}, isHorizontal, location)) {
-                direction = EAST;
-            }
-            return;
-        case WEST:
-            if (extendWallIfPossible(location, isHorizontal, location)) {
-                direction = SOUTH;
-            }
-            return;
-    }
-}
-
-void Map::goRight(GridPoint &location, Direction &direction) {
-    // if the wall is horizontal, then the new wall will be vertical and vice versa
-    bool isHorizontal = !this->wallWithDirectionIsHorizontal(direction);
-    switch (direction) {
-        case NORTH:
-            if (extendWallIfPossible(location, isHorizontal, location)) {
-                direction = EAST;
-            }
-            return;
-        case EAST:
-            if (extendWallIfPossible(GridPoint{location.x + 1, location.y}, isHorizontal, location)) {
-                direction = SOUTH;
-            }
-            return;
-        case SOUTH:
-            if (extendWallIfPossible(GridPoint {location.x-1, location.y+1}, isHorizontal, location)) {
-                direction = WEST;
-            }
-            return;
-        case WEST:
-            if (extendWallIfPossible(GridPoint {location.x, location.y-1}, isHorizontal, location)) {
-                direction = NORTH;
-            }
-            return;
-    }
-}
-
-bool Map::wallWithinBorders(GridPoint point, bool isHorizontal) {
-    if (isHorizontal) {
-        return point.x >= 0 && point.x < this->width - 1 && point.y >= 1 && point.y < this->height-2;
-    } else {
-        return point.x >= 1 && point.x < this->width - 2 && point.y >= 0 && point.y < this->height-1;
-    }
-}
-
-int Map::nrOfOtherWallsTouching(GridPoint point, bool isHorizontal) {
-    if (isHorizontal) {
-        return
-            this->isVWall(point) +
-            this->isHWall(GridPoint {point.x+1, point.y}) + this->isVWall(GridPoint {point.x+1, point.y}) +
-            this->isVWall(GridPoint {point.x, point.y-1}) +
-            this->isHWall(GridPoint {point.x-1, point.y}) +
-            this->isVWall(GridPoint {point.x+1, point.y-1});
-    } else {
-        return
-            this->isHWall(point) +
-            this->isHWall(GridPoint {point.x, point.y+1}) + this->isVWall(GridPoint {point.x, point.y+1}) +
-            this->isVWall(GridPoint {point.x, point.y-1}) +
-            this->isHWall(GridPoint {point.x-1, point.y}) +
-            this->isHWall(GridPoint {point.x-1, point.y+1});
-    }
-}
-
-
-bool Map::isHWall(GridPoint point) {
-    if (point.x < 0 || point.x >= this->width || point.y < 0 || point.y >= this->height) {
-        return false;
-    }
-    return this->horizontalWalls[point.y*this->width + point.x] == 1;
-}
-
-bool Map::isVWall(GridPoint point) {
-    if (point.x < 0 || point.x >= this->width || point.y < 0 || point.y >= this->height) {
-        return false;
-    }
-    return this->verticalWalls[point.y*this->width + point.x] == 1;
-}
-
-bool Map::wallWithDirectionIsHorizontal(Direction direction) {
-    return direction == EAST || direction == WEST;
 }

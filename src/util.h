@@ -13,13 +13,21 @@
 #define DEBUG false
 #define COLLISION_TESTING false
 
+enum Direction {NORTH, EAST, SOUTH, WEST};
+Direction operator++(Direction& direction);
+Direction operator--(Direction& direction);
+bool directionIsHorizontal(Direction direction);
+
 struct Point {
     float x;
     float y;
 };
+
 struct GridPoint {
     int x;
     int y;
 };
+GridPoint operator+(GridPoint a, GridPoint b);
+
 uint64_t timeSinceEpochMillisec();
 Point rotatePoint(Point point, Point pivotPoint, float angleInDegrees);

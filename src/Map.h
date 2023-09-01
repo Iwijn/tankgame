@@ -22,6 +22,7 @@ private:
     int nrOfOtherWallsTouching(GridPoint point, bool isHorizontal);
     GridPoint getTreeStartPoint(Direction treeDirection);
     bool extendWallIfPossible(GridPoint point, bool isHorizontal, GridPoint &oldPoint);
+    bool wallWithDirectionIsHorizontal(Direction direction);
 public:
     int width;
     int height;
